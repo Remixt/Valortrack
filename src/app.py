@@ -7,7 +7,11 @@ import requests
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
-key = 'RGAPI-0a3395f3-6b39-4679-a1e4-85f80dc475bf'
+config = {}
+with open('config.json') as json_file:
+    config = json.load(json_file)
+print(config['api_key'])
+api_key = config['api_key']
 riot_url = ".api.riotgames.com" #url for contacting the riot games api, requires region in front of it. example: na1.api.riotgames.com
 sum_url = "/lol/summoner/v4/summoners/by-name/"
 def dict_factory(cursor, row):
@@ -29,8 +33,8 @@ def api_all():
     cur = conn.cursor()
     all_pages = cur.execute('SELECT * FROM pages;').fetchall()
     try:
-        for key in range(len(all_pages)):#format the inner json table
-            all_pages[key]['table'] = json.loads(all_pages[key]['table'])
+        for api_key in range(len(all_pages)):#format the inner json table
+            all_pages[api_key]['table'] = json.loads(all_pages[api_key]['table'])
         return jsonify(all_pages)
     except:
         pass
@@ -46,7 +50,7 @@ def api_filter():
 
     sum_name = query_parameters.get('summoner')
     region = query_parameters.get('region')
-    query = str("https://"+region+riot_url+sum_url+sum_name+"?api_key="+key)
+    query = str("https://"+region+riot_url+sum_url+sum_name+"?api_key="+api_key)
     print(query)
     results = requests.get(url = query) 
     results = json.loads(results.content)
