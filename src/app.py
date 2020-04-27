@@ -19,7 +19,7 @@ def dict_factory(cursor, row):
 
 @app.route('/', methods=['GET'])
 def home():
-    return '''<h1>Intrusion Shield API</h1>'''
+    return '''<h1>ValorStats API</h1>'''
 
 
 @app.route('/api/v1/resources/pages/all', methods=['GET'])
